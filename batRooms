@@ -1,0 +1,22 @@
+void placeBats(){
+    int batRoom, batRoom2, wumpusRoom;
+    int bat, bat2;
+    
+    srand(time(NULL)); // rand() zal hierdoor steeds een andere selectie van getallen genereren
+    bool validRoom = false; // zodat hij niet genereert waar de player staat
+    while (!validRoom){
+        batRoom = rand() % 20 + 1; // als room true is zet bat in random room van 1 tot 20
+        if(batRoom != wumpusRoom){ // als batRoom niet hetzelfde is als waar de wumpus is, is de room valid
+            validRoom = true;
+        }
+    }
+    validRoom = false;
+    while(!validRoom){
+        batRoom2 = rand % 20 + 1;
+        if (batRoom2 != batRoom && batRoom2 != wumpusRoom){
+            validRoom = true;
+        }
+    }
+    bat = batRoom;
+    bat2 = batRoom2;
+}
