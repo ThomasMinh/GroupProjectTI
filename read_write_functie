@@ -1,0 +1,33 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+using namespace std;
+
+void RF(vector<vector<int>> & numbers){
+	ofstream WFile("map.txt");
+
+	for(unsigned int i=0; i<numbers.size();i++){
+		for(unsigned int j=0; j<numbers.size();j++){
+			WFile << numbers[i][j];
+		}
+	}
+ 
+	WFile.close();
+
+	string Text;
+
+	ifstream RFile("map.txt");
+
+	while (getline (RFile, Text)) {
+		cout << Text;
+	}
+
+	RFile.close();
+}
+
+
+int main () {
+    vector<vector<int>> kamers = {{1,2,3}, {4,5,6}, {7,8,9}};
+	
+	RF(kamers);
+}
