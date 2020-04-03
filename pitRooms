@@ -1,0 +1,22 @@
+void placePits(){
+    int pitRoom, pitRoom2, wumpusRoom;
+    int pit, pit2;
+    
+    srand(time(NULL));  // rand() zal hierdoor steeds een andere selectie van getallen genereren
+    bool validRoom = false;
+    while(!validRoom){
+        pitRoom = rand % 20 + 1; // als room true is zet bat in random room van 1 tot 20
+        if (pitRoom != wumpusRoom){
+            validRoom = true;
+        }
+    }
+    validRoom = false;
+    while(!validRoom){
+        pitRoom2 = rand % 20 + 1;
+        if ((pitRoom2 != pitRoom) && (pitRoom2 != wumpusRoom)){
+            validRoom = true;
+        }
+    }
+    pit = pitRoom;
+    pi2 = pitRoom2;
+}
