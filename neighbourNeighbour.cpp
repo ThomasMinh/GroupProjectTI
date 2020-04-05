@@ -1,7 +1,7 @@
 #include <vector>
 using namespace std;
 
-bool neighbourNeighbour(int currentRoom, int wumpusRoom){
+bool WumpusGame::neighbourNeighbour(int currentRoom, int wumpusRoom){
 	vector<int> neighbours = read(currentRoom);
 	vector<int> neighboursOfNeighbour = {};
 	
