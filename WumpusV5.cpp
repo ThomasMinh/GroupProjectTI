@@ -112,7 +112,7 @@ void WumpusGame::write(vector<vector<int>> & numbers){
 	WFile.close();
 }
 
-vector<int> WumpusGame::read(int currentroom){
+vector<int> WumpusGame::read(int currentRoom){
     string Text = "";
     int number;
 	int line = 0;
