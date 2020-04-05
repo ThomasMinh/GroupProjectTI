@@ -179,7 +179,7 @@ void WumpusGame::moveWumpus(){
 		wumpusRoom = naast[1];
 	}
 	else if(o = 4) {
-		wumpusRoom = naast[3];
+		wumpusRoom = naast[2];
 	}
 	
  }
