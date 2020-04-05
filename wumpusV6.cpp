@@ -16,7 +16,7 @@ class WumpusGame {
     private:
       int numRooms;
       int currentRoom, startingPosition;
-      int wumpusRoom, wumpusStart;
+      int wumpusRoom, wumpusStart, bat1Start, bat2Start;
       bool playerAlive, wumpusAlive;
       int batRoom, batRoom2, pitRoom, pitRoom2;
       int bat, bat2, pit, pit2;
@@ -124,7 +124,7 @@ vector<int> WumpusGame::read(int roomID){
     string Text = "";
     int number;
 	int line = 0;
-	int regel = currentRoom;
+	int regel = roomID;
     vector<int> rooms;
 	ifstream RFile("map.txt");
 
@@ -337,6 +337,8 @@ void WumpusGame::PlayAgain(){
     if(antwoord == 'y' || antwoord == 'Y'){
         currentRoom = startingPosition;
         wumpusRoom = wumpusStart;
+        batRoom = bat1Start;
+        batRoom2 = bat2Start;
         cout << "Goodluck." << endl;
         InspectCurrentRoom();
     } else {
@@ -387,6 +389,7 @@ void WumpusGame::PerformAction(int cmd) {
                             cin >> newRoom;
                             cin.clear();
                             cin.ignore(10000, '\n');
+                            StartGame();
                         }
                         else{
                             cout << "Oh no!!, you missed the Wumpus!!" << endl;
