@@ -23,7 +23,7 @@ void WumpusGame::PerformAction(int cmd) {
             }
             break;
   
-        case 2:
+        case 2: 
             if (arrows > 0){ //kijkt of user nog arrows heeft, zo ja dan kan de user door spelen
                 cout << "Which room? " << endl;
                 try{
