@@ -1,14 +1,14 @@
-#include "WumpusFunctions.h"
+/*#include "WumpusFunctions.h"
 
 void PlayAgain(){
     char antwoord;
     cout << "Would you like to play again with the same map? Enter Y/N. if you want to quit, press Q" << endl;
     cin >> antwoord;
     if(antwoord == 'y' || antwoord == 'Y'){
-        currentRoom = startingPosition;
-        wumpusRoom = wumpusStart;
-        batRoom = bat1Start;
-        batRoom2 = bat2Start;
+        int currentRoom = startingPosition;
+        int wumpusRoom = wumpusStart;
+        int batRoom = bat1Start;
+        int batRoom2 = bat2Start;
         InspectCurrentRoom();
     }else if(antwoord == 'q' || antwoord == 'Q'){
         StartGame();
@@ -26,7 +26,6 @@ void PlayAgain(){
 }
 
 void PerformAction(int cmd) {
-    int newRoom;
     string line;
     ifstream WFile("map.txt");
     switch (cmd)
@@ -123,3 +122,64 @@ void moveWumpus(){
 int Move(int newRoom){
     return newRoom;
 }
+
+void PlayGame(){
+    int choice;
+    bool validChoice = false;
+    vector<vector<int>> map = generateMap();
+    
+    srand(time(NULL));  // rand() zal hierdoor steeds een andere selectie van getallen genereren
+    PlacePlayer();
+    PlaceWumpus();
+    placeBats();
+    placePits();
+    write(map);
+    
+    InspectCurrentRoom();
+ 
+    while (playerAlive)
+    {
+        cout << "Enter an action choice." << endl;
+        cout << "1) Move" << endl;
+        cout << "2) Shoot?" << endl;
+        cout << "3) Quit" << endl;
+        cout << ">>> ";
+ 
+        do //splitsen
+        {
+            validChoice = true;
+            cout << "Please make a selection: ";
+            try
+            {
+                cin >> choice;
+                switch (choice)
+                {
+                    case 1:
+                        PerformAction(choice);
+                        break;
+                    case 2:
+                        PerformAction(choice);
+                        break;
+                    case 3:
+                        PerformAction(choice);
+                        break;
+                    default:
+                        validChoice = false;
+                        cout << "Invalid choice. Please try again." << endl;
+                        cin.clear();
+                        cin.ignore(10000, '\n');
+                        break;
+                }
+            }
+            catch (...)
+            {
+                validChoice = false;
+                cout << "Invalid choice. Please try again." << endl;
+                cin.clear();
+                cin.ignore(10000, '\n');
+            }
+ 
+        } while (validChoice == false);
+    }
+}
+*/

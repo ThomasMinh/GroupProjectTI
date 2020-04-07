@@ -1,5 +1,3 @@
-#include "WumpusFunctions.h"
-
 void write(vector<vector<int>> & numbers){
 	ofstream WFile("map.txt");
 

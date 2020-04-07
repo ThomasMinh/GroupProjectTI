@@ -1,4 +1,6 @@
+#include <iostream>
 #include "WumpusFunctions.h"
+using namespace std;
  
 void StartGame() {
     srand (time(NULL));
@@ -10,6 +12,7 @@ void StartGame() {
         keepPlaying = true;
         cout << "Welcome to Hunt The Wumpus." << endl;
         cout << "1) Play Game" << endl;
+        cout << "2) instructions" << endl;
         cout << "2) Quit" << endl;
         
         do{
@@ -24,6 +27,9 @@ void StartGame() {
                       PlayGame();
                       break;
                   case 2:
+                      instructions();
+                      break;
+                  case 3:
                       cout << "Quitting." << endl;
                       keepPlaying = false;
                       break;

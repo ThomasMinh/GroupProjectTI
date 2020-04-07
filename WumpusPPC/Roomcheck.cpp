@@ -1,4 +1,4 @@
-#include "WumpusFunctions.h"
+/*#include "WumpusFunctions.h"
 
 bool isRoomValid(int newRoom){
     vector<int> neighbour = read(currentRoom);
@@ -103,4 +103,4 @@ void InspectCurrentRoom() {
         }
             cout << endl;
     }
-}
+}*/
