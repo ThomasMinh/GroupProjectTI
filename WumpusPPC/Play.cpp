@@ -102,13 +102,13 @@ void PerformAction(int cmd) {
     }
 }
 
-void moveWumpus(){
-	int o = rand() % 4 + 1;
+void moveWumpus(){	// Zorgt ervoor dat er een kans is dat de wumpus naar een buurtkamer verplaatst als er mis is geschoten
+	int o = rand() % 4 + 1;	// o wordt een random getal tussen de 1 en 4
 	vector <int> naast = read(wumpusRoom);
-	if(o == 1){
+	if(o == 1){				// bij o == 1 blijft hij in dezelfde kamer zitten
 		wumpusRoom = wumpusRoom;
 	}
-	else if(o == 2) {
+	else if(o == 2) {			// bij o is gelijk aan 2,3 of 4 verplaatst de wumpus naar buurtkamer 1,2 of 3 wat te readen is uit de map.txt file
 		wumpusRoom = naast[0];
 	}
 	else if(o == 3) {
