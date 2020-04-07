@@ -1,6 +1,6 @@
 #include "WumpusFunctions.h"
 
-void write(vector<vector<int>> & numbers){
+void write(vector<vector<int>> & numbers){	// Write gegenereerde map en alle hazards naar een .txt bestand
 	ofstream WFile("map.txt");
 
 	for(unsigned int i=0; i<numbers.size();i++){
@@ -18,7 +18,7 @@ void write(vector<vector<int>> & numbers){
 	WFile.close();
 }
 
-vector<int> read(int roomID){
+vector<int> read(int roomID){	// Read de buurkamers van de gegeven kamer
     string Text = "";
     int number;
 	int line = 0;
@@ -26,7 +26,7 @@ vector<int> read(int roomID){
     vector<int> rooms;
 	ifstream RFile("map.txt");
 
-	while (line != regel && getline(RFile, Text)) {
+	while (line != regel && getline(RFile, Text)) {	// Telt door tot de regel van de gegeven kamer en voegt dan de buurkamers toe aan rooms
 		line++;
 	}
 	if(line == regel){
