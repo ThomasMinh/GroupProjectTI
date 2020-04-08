@@ -1,3 +1,10 @@
+	if(neighbourNeighbour(currentRoom, coronaRoom)){
+            cout << "Something smells fishy " << endl;
+			smellCorona = true;
+        }
+		else{
+			smellCorona = false;
+
 	// Als de hint dat de corona dichtbij is gegeven is, verhoog het aantal beurten dat de hint gegeven is met 1.
 	if (smellCorona == true){
 		turnsSmelled++;
