@@ -3,7 +3,7 @@
 using namespace std;
  
 void StartGame() {
-    srand (time(NULL));
+    srand(time(NULL));  // rand() zal hierdoor steeds een andere selectie van getallen genereren
     int choice;
     bool validChoice;
     bool keepPlaying;
@@ -13,7 +13,8 @@ void StartGame() {
         cout << "Welcome to Kill The Corona." << endl;
         cout << "1) Play Game" << endl;
         cout << "2) instructions" << endl;
-        cout << "2) Quit" << endl;
+        cout << "3) Computer Play game" << endl;
+        cout << "4) Quit" << endl;
         
         do{
           validChoice = true;
@@ -30,6 +31,9 @@ void StartGame() {
                       instructions();
                       break;
                   case 3:
+                      PlayGameComputer();
+                      break;
+                  case 4:
                       cout << "Quitting." << endl;
                       keepPlaying = false;
                       break;

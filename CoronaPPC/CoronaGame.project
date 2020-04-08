@@ -8,6 +8,7 @@
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
+    <File Name="ComputerAI.cpp"/>
     <File Name="Roomcheck.cpp"/>
     <File Name="WriteRead.cpp"/>
     <File Name="Play.cpp"/>

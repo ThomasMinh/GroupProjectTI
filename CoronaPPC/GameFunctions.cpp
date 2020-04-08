@@ -2,11 +2,12 @@
 
 int newRoom = 0;
 int currentRoom = 0, startingPosition = 0 ;
-int coronaRoom = 0, coronaStart = 0, police1Start = 0, police2Start = 0;
-bool playerAlive = true, coronaAlive = true; //kan playyer in apart functie
-int policeRoom = 0, policeRoom2 = 0, qZoneRoom = 0, qZoneRoom2 = 0;
-int police = 0, police2 = 0, qZone = 0, qZone2 = 0;
-int sprays = 5;
+int coronaRoom = 0, coronaStart = 0, police1Start = 0, police2Start = 0, ventStart = 0;
+bool playerAlive = true, coronaAlive = true, computerAlive = true; //kan playyer in apart functie
+int policeRoom = 0, policeRoom2 = 0, qZoneRoom = 0, qZoneRoom2 = 0, ventRoom = 0;
+int police = 0, police2 = 0, qZone = 0, qZone2 = 0, vent = 0;
+int sprays = 5, turnsFelt = 0, counter = 0, tryCounter = 1;
+bool hasVent = false, feelCorona = false;
 fstream WFile;
 vector<vector<int>> map = generateMap();
 
@@ -65,6 +66,17 @@ void placeQZones(){
     qZone2 = qZoneRoom2;
 }
 
+void placeVentilator(){
+	bool validRoom = false;
+	while(!validRoom){
+        ventRoom = rand() % 20 + 1;
+		 if (ventRoom != coronaRoom && ventRoom != startingPosition && ventRoom != policeRoom && ventRoom != policeRoom2 && ventRoom != qZoneRoom && ventRoom != qZoneRoom2){
+            validRoom = true;
+		 }
+	}
+	vent = ventRoom;
+}
+
 void write(vector<vector<int>> & numbers){
 	ofstream WFile("map.txt");
 
@@ -79,6 +91,7 @@ void write(vector<vector<int>> & numbers){
     WFile << "PoliceRoom2 is room = " << policeRoom2 << "\n";
     WFile << "QuarantineZone1 is room = " << qZoneRoom << "\n";
     WFile << "QuarantineZone2 is room = " << qZoneRoom2 << "\n";
+    WFile << "The fan is in room = " << ventRoom << "\n";
  
 	WFile.close();
 }
@@ -105,11 +118,7 @@ vector<int> read(int roomID){
 }
 
 bool isRoomValid(int newRoom){
-    // Slaat de buurkamers van de huidige kamer.
     vector<int> neighbour = read(currentRoom);
-    
-    // Loopt door de buurkamers, als 1 gelijk is aan de gegeven kamer return true,
-    // anders return false.
     for(unsigned int i = 0; i < 3; i++){
             if(neighbour[i] == newRoom){
                 return true;
@@ -117,6 +126,7 @@ bool isRoomValid(int newRoom){
     }
     return false;
 }  
+
 
 bool IsRoomAdjacent(int roomA, int roomB){
     vector<int> neighbour = read(roomA);
@@ -130,51 +140,68 @@ bool IsRoomAdjacent(int roomA, int roomB){
 }
  
  
-bool neighbourNeighbour(int currentRoom, int coronaRoom){ //Deze functie is om de corona te ruiken
-	vector<int> neighbours = read(currentRoom); // slaat de buurkamers op van de huidige kamer.
-	vector<int> neighboursOfNeighbour = {}; // slaat de buurkamers op van de buurkamers van de currentroom.
+bool neighbourNeighbour(int currentRoom, int coronaRoom){ //Deze functie is om de de wumpus te ruiken
+	vector<int> neighbours = read(currentRoom);
+	vector<int> neighboursOfNeighbour = {};
 	
-	// Loop door de buurkamers van de huidige kamer.
 	for(unsigned int i = 0; i < neighbours.size(); i++){
-		// Als de buurkamer hetzelfde is als de coroona kamer, return true.
 		if (neighbours[i] == coronaRoom){
 			return true;
 		}
 		
-		neighboursOfNeighbour = read(neighbours[i]); // sla de buurkamers van de huidige buurkamer op. 
-		
-		// Loop door de buurkamers van de huidige buurkamer.
+		neighboursOfNeighbour = read(neighbours[i]);
 		for(unsigned int j = 0; j < neighboursOfNeighbour.size(); j++){
-			// Als de buurkamer hetzelfde is als de corona kamer, return true.	
 			if (neighboursOfNeighbour[j] == coronaRoom){
 				return true;
 			}
 		}
 	}
-	// Als de corona kamer niet gevonden is, return false.
 	return false;
 }
  
 void InspectCurrentRoom() {
     vector<int> neighbour = read(currentRoom);
-    if(currentRoom == coronaRoom){ //Als de wumpus je eet
-        
-        cout << "The Wumpus ate you!" << endl;
-        cout << "You suck, loser" << endl;
-        PlayAgain();
-        
-    } else if(currentRoom == policeRoom || currentRoom == policeRoom2){ // Als je in een batroom bent gekomen
+    if(currentRoom == coronaRoom){ //Als de corona je infecteert
+        if(hasVent == true){
+            cout << "You used the fan to blow the Corona away" << endl;
+            hasVent = false;
+            moveCorona();
+            if(currentRoom == coronaRoom){
+                cout << "Oh no, The fan didn't work! you have been killed by the Coronavirus" << endl;
+                tryCounter++;
+                if(computerAlive){
+                    PlayAgainComputer();
+                } else{
+                    PlayAgain();
+                }
+            } else{
+                cout << "You managed to blow the Coronavirus away. The fan seems unusable now" << endl;
+                InspectCurrentRoom();
+            }
+        } else{
+            cout << "You have been killed by the Coronavirus" << endl;
+            cout << "You suck, loser " << endl;
+            tryCounter++;
+            if(computerAlive){
+                    PlayAgainComputer();
+                } else{
+                    PlayAgain();
+                }
+        }
+    } 
+    
+    else if(currentRoom == policeRoom || currentRoom == policeRoom2){ // Als je in een batroom bent gekomen
         int roomPoliceOver = currentRoom;;
         bool validNewPoliceRoom = false;
         bool isPoliceRoom = false;;
-        cout << "A bat picked you up" << endl;
+        cout << "A police officer caught you" << endl;
         while(!isPoliceRoom){
             currentRoom = Move(rand() % 20);
             if(currentRoom != policeRoom && currentRoom != policeRoom2){
                 isPoliceRoom = true;
             } 
         }
-        cout << "The bat moved you to room " << currentRoom << endl;
+        cout << "The police moved you to room " << currentRoom << endl;
         InspectCurrentRoom();
         
         if(roomPoliceOver == policeRoom){
@@ -194,21 +221,34 @@ void InspectCurrentRoom() {
         }
     }
     
+    
     else if(currentRoom == qZoneRoom || currentRoom == qZoneRoom2){ //als je in een pitrooom komt
-        cout << "Rip, you fell in a pit" << endl;
+        cout << "Rip, you got quarantined" << endl;
         cout << "You suck, loser" << endl;
-        PlayAgain();
+        tryCounter++;
+        if(computerAlive){
+            PlayAgainComputer();
+        } else{
+            PlayAgain();
+        }
     } else{
+        cout << endl;
+        if(currentRoom == ventRoom){
+            cout << "You found a fan! This may come in handy." << endl;
+            hasVent = true;
+        } 
         cout << "You are in room ";
         cout << currentRoom << endl;
         if(neighbourNeighbour(currentRoom, coronaRoom)){
-            cout << "Something smells fishy " << endl;
-        }
-        if(IsRoomAdjacent(currentRoom, policeRoom) || IsRoomAdjacent(currentRoom, policeRoom2)){
-            cout << "Bats are nearby " << endl;
+            cout << "My skin feels itchy " << endl;
+			feelCorona = true;
+        } else{
+			feelCorona = false;
+        }if(IsRoomAdjacent(currentRoom, policeRoom) || IsRoomAdjacent(currentRoom, policeRoom2)){
+            cout << "You hear sirens nearby " << endl;
         }
         if(IsRoomAdjacent(currentRoom, qZoneRoom) || IsRoomAdjacent(currentRoom, qZoneRoom2)){
-            cout << "You feel a draft " << endl;
+            cout << "You can hear people coughing " << endl;
         }
         cout << "Tunnels lead to rooms " << endl;
         for (int j = 0; j < 3; j++)
@@ -220,6 +260,8 @@ void InspectCurrentRoom() {
 }
 
 void PlayAgain(){
+    sprays = 5;
+    counter = 0;
     char antwoord;
     cout << "Would you like to play again with the same map? Enter Y/N. if you want to quit, press Q" << endl;
     cin >> antwoord;
@@ -228,6 +270,8 @@ void PlayAgain(){
         coronaRoom = coronaStart;
         policeRoom = police1Start;
         policeRoom2 = police2Start;
+        ventRoom = ventStart;
+        
         InspectCurrentRoom();
     }else if(antwoord == 'q' || antwoord == 'Q'){
         StartGame();
@@ -238,6 +282,7 @@ void PlayAgain(){
         PlaceCorona();
         placePolice();
         placeQZones();
+        placeVentilator();
         write(map);
         InspectCurrentRoom();
     }
@@ -280,9 +325,10 @@ void PerformAction(int cmd) {
                         sprays--;
                         if (newRoom == coronaRoom){
                             cout << "Splashhhhh!" << endl;
-                            cout << "The Corona is dead. You killed it!" << endl;
+                            cout << "The Coronavirus has been exterminated" << endl;
                             cout << "Congratulations!! You win!!" << endl;
-                            coronaAlive = false; //Wumpus is dood
+                            cout << "It took you: " << counter << " turns to win." << endl;
+                            coronaAlive = false; //Corona is exterminated 
                             PlayGame();
                         } 
                         else{
@@ -291,7 +337,7 @@ void PerformAction(int cmd) {
                             moveCorona();
                             if(coronaRoom == currentRoom){
                                 cout << "The Corona flew to your room" << endl;
-                                cout << "YOU ARE INFECTED, now you're dead. You suck, loser" << endl;
+                                cout << "YOU HAVE BEEN INFECTED, now you're dead. You suck, loser" << endl;
                                 PlayAgain();
                                 } 
                             } InspectCurrentRoom();
@@ -340,19 +386,19 @@ void moveCorona(){
 
 int Move(int newRoom){
     return newRoom;
+    counter++;
 }
 
 void PlayGame(){
-    srand (time(NULL));
+    computerAlive = false;
     int choice;
     bool validChoice = false;
     vector<vector<int>> map = generateMap();
-    
-    srand(time(NULL));  // rand() zal hierdoor steeds een andere selectie van getallen genereren
     PlacePlayer();
     PlaceCorona();
     placePolice();
     placeQZones();
+    placeVentilator();
     write(map);
     
     InspectCurrentRoom();
@@ -398,8 +444,109 @@ void PlayGame(){
                 cin.clear();
                 cin.ignore(10000, '\n');
             }
- 
+            
         } while (validChoice == false);
     }
 }
 
+void PlayAgainComputer(){
+    cout << "Would you like to play again with the same map? Enter Y/N. if you want to quit, press Q" << endl;
+    cout << "Y " << endl; 
+    currentRoom = startingPosition;
+    coronaRoom = coronaStart;
+    policeRoom = police1Start;
+    policeRoom2 = police2Start;
+    ventRoom = ventStart;
+    sprays = 5;
+    counter = 0;
+    InspectCurrentRoom();
+}
+
+void moveComputer(){
+    cout << "1" << endl;
+    int roomChoice = 0;
+    vector<int> neighbourRooms = read(currentRoom); //leest alle buurkamers die er zijn
+    int randNumber = rand() % 3; //genereert een random nummer tussen 0 en 2
+    
+    cout << "Which room? ";
+    roomChoice = neighbourRooms[randNumber]; // kiest een kamer van 1 van de buurkamers
+    cout << roomChoice << endl; //de computer laat zijn keuze zien 
+    currentRoom = Move(roomChoice);
+    InspectCurrentRoom();
+}
+
+void PlayGameComputer(){
+    playerAlive = false;
+    sprays = 5;
+    tryCounter = 1;
+    vector<vector<int>> map = generateMap();
+
+    PlacePlayer();
+    PlaceCorona();
+    placePolice();
+    placeQZones();
+    write(map);
+    
+    InspectCurrentRoom();
+ 
+    while (computerAlive){
+        cout << "Enter an action choice." << endl;
+        cout << "1) Move" << endl;
+        cout << "2) Shoot?" << endl;
+        cout << ">>> ";
+ 
+        cout << "Please make a selection: ";
+        
+        
+        // Als de hint dat de corona dichtbij is gegeven is, verhoog het aantal beurten dat de hint gegeven is met 1.
+        if (feelCorona == true){
+            turnsFelt++;
+        }
+        else{
+		turnsFelt = 0;
+        }
+        counter++;
+        cout << "Sprays " << sprays << endl;
+        // Als de corona vaker dan 1 keer geroken is en er nog sprays over zijn, spray in 1 van de buurkamers.
+        if (turnsFelt > 1 && sprays > 0){
+            cout << "2" << endl;
+            sprays--;
+            vector<int> neighbours = read(currentRoom);
+            int choice = rand() % 3;
+            cout << "Which room? " << endl;
+            cout << neighbours[choice] << endl;
+		
+            // Als het de kamer was met de corona, dan heeft de computer gewonnen.
+            if(neighbours[choice] == coronaRoom){
+                cout << "Splashhhhh!" << endl;
+                cout << "The Coronavirus has been exterminated!" << endl;
+                cout << "Congratulations!! You win!!" << endl;
+                cout << "It took the computer: " << counter << " turns " << endl;
+                cout << "and " << tryCounter << " tries to win." << endl;
+                
+                cout << endl;
+                coronaAlive = false; // Corona is dood
+                StartGame();
+            }
+            // Als het niet de goede kamer was beweegt de wumpus.
+            else{
+                cout << "Oh no!!, you missed the Corona!!" << endl;
+                cout << "The Corona flew to another room " << endl;
+                turnsFelt = 0;
+                moveCorona();
+                    // Als de corona naar de kamer dat de computer zat bewoog, dan heeft de computer verloren.
+                    if(coronaRoom == currentRoom){
+                        cout << "The Corona flew to your room" << endl;
+                        cout << "YOU ARE INFECTED, now you're dead. You suck, loser" << endl;
+                        PlayAgainComputer();
+                    }
+                    else{
+                        // Als het spel nog niet voorbij is, ga naar de volgende beurt.
+                        InspectCurrentRoom();
+                    }
+            }
+        } else{
+            moveComputer();
+        }
+    }
+}

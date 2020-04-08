@@ -1,9 +1,5 @@
 /* bool isRoomValid(int newRoom){
-    // Slaat de buurkamers van de huidige kamer.
     vector<int> neighbour = read(currentRoom);
-    
-    // Loopt door de buurkamers, als 1 gelijk is aan de gegeven kamer return true,
-    // anders return false.
     for(unsigned int i = 0; i < 3; i++){
             if(neighbour[i] == newRoom){
                 return true;
@@ -25,28 +21,22 @@ bool IsRoomAdjacent(int roomA, int roomB){
 }
  
  
-bool neighbourNeighbour(int currentRoom, int coronaRoom){ //Deze functie is om de corona te ruiken
-	vector<int> neighbours = read(currentRoom); // slaat de buurkamers op van de huidige kamer.
-	vector<int> neighboursOfNeighbour = {}; // slaat de buurkamers op van de buurkamers van de currentroom.
+bool neighbourNeighbour(int currentRoom, int coronaRoom){ //Deze functie is om de de wumpus te ruiken
+	vector<int> neighbours = read(currentRoom);
+	vector<int> neighboursOfNeighbour = {};
 	
-	// Loop door de buurkamers van de huidige kamer.
 	for(unsigned int i = 0; i < neighbours.size(); i++){
-		// Als de buurkamer hetzelfde is als de coroona kamer, return true.
 		if (neighbours[i] == coronaRoom){
 			return true;
 		}
 		
-		neighboursOfNeighbour = read(neighbours[i]); // sla de buurkamers van de huidige buurkamer op. 
-		
-		// Loop door de buurkamers van de huidige buurkamer.
+		neighboursOfNeighbour = read(neighbours[i]);
 		for(unsigned int j = 0; j < neighboursOfNeighbour.size(); j++){
-			// Als de buurkamer hetzelfde is als de corona kamer, return true.	
 			if (neighboursOfNeighbour[j] == coronaRoom){
 				return true;
 			}
 		}
 	}
-	// Als de corona kamer niet gevonden is, return false.
 	return false;
 }
  
