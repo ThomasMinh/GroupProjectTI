@@ -8,11 +8,15 @@ void moveComputer(){
     int randNumber = rand() % 3; //genereert een random nummer tussen 0 en 2
     
     cout << "Which room? ";
+    //!!TODO hier ergens breakt ie hem waardoor het programma stopt!!
     roomChoice = neighbourRooms[randNumber]; // kiest een kamer van 1 van de buurkamers
-    cout << roomChoice << endl; //de computer laat zijn keuze zien
-    computerRoom = Move(roomChoice);
+    cout << roomChoice << endl; //de computer laat zijn keuze zien 
+    if(isRoomValid(roomChoice)){
+        computerRoom = Move(roomChoice);
+        InspectCurrentRoom();
+    }
 }
-
+            
 void PlayGameComputer(){
     srand (time(NULL));
     bool validChoice = false;
