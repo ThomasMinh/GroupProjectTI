@@ -1,5 +1,9 @@
 /* bool isRoomValid(int newRoom){
+    // Slaat de buurkamers van de huidige kamer.
     vector<int> neighbour = read(currentRoom);
+    
+    // Loopt door de buurkamers, als 1 gelijk is aan de gegeven kamer return true,
+    // anders return false.
     for(unsigned int i = 0; i < 3; i++){
             if(neighbour[i] == newRoom){
                 return true;
