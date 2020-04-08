@@ -7,7 +7,7 @@ void moveComputer(){
     vector<int> neighbourRooms = read(computerRoom); //leest alle buurkamers die er zijn
     int randNumber = rand() % 3; //genereert een random nummer tussen 0 en 2
     
-    cout << "Which room? " << endl;
+    cout << "Which room? ";
     roomChoice = neighbourRooms[randNumber]; // kiest een kamer van 1 van de buurkamers
     cout << roomChoice << endl; //de computer laat zijn keuze zien
     computerRoom = Move(roomChoice);
