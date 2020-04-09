@@ -467,7 +467,7 @@ void PlayAgainComputer(){ //Play again voor de computerspeler
     policeRoom2 = police2Start;
     ventRoom = ventStart;
     sprays = 5;
-    counter = 0;
+    turnsFelt = 0;
     InspectCurrentRoom(); //checkt waar de computer is
 }
 
@@ -488,6 +488,7 @@ void PlayGameComputer(){ //de Ai gaat spelen
     playerAlive = false; //zet de playerAlive op false voor de playagain functies
     sprays = 5;
     tryCounter = 1; //tellen hoe vaak de Ai de game heeft gespeeld met dezelfde configuratie
+    counter = 0;
     vector<vector<int>> map = generateMap();
 
     PlacePlayer();
