@@ -205,7 +205,7 @@ void InspectCurrentRoom() { //Inspecteerd in welke kamer je zit en of die ergens
         bool isPoliceRoom = false;;
         cout << "A police officer caught you" << endl;
         while(!isPoliceRoom){
-            currentRoom = Move(rand() % 20);    //moved je naar een random kamer wat geen police room is
+            currentRoom = Move(rand() % 20 + 1);    //moved je naar een random kamer wat geen police room is
             if(currentRoom != policeRoom && currentRoom != policeRoom2){
                 isPoliceRoom = true;
             } 
@@ -215,14 +215,14 @@ void InspectCurrentRoom() { //Inspecteerd in welke kamer je zit en of die ergens
         
         if(roomPoliceOver == policeRoom){   //moved de police naar een random andere kamer
             while(!validNewPoliceRoom){
-                policeRoom = rand() % 19;
+                policeRoom = rand() % 19 + 1;
                 if(policeRoom != coronaRoom && policeRoom != currentRoom){
                     validNewPoliceRoom = true;
                 }
             }
         } else{
             while(!validNewPoliceRoom){
-                policeRoom2 = rand() % 19;
+                policeRoom2 = rand() % 19 + 1;
                 if(policeRoom2 != coronaRoom && policeRoom2 != currentRoom){
                     validNewPoliceRoom = true;
                 }
