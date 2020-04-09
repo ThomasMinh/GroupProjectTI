@@ -4,9 +4,9 @@ int newRoom = 0;
 int currentRoom = 0, startingPosition = 0 ;
 int coronaRoom = 0, coronaStart = 0;
 bool playerAlive = true, coronaAlive = true, computerAlive = true; 
-int policeRoom = 0, policeRoom2 = 0, qZoneRoom = 0, qZoneRoom2 = 0, ventRoom = 0; //Alle 
+int policeRoom = 0, policeRoom2 = 0, qZoneRoom = 0, qZoneRoom2 = 0, ventRoom = 0; 
 int police1Start = 0, police2Start = 0, qZone1Start = 0, qZone2Start = 0, ventStart = 0;
-int sprays = 5, turnsFelt = 0, counter = 0, tryCounter = 1;
+int sprays = 5, turnsFelt = 0, counterAI = 0, tryCounter = 1, counterSpeler = 0, wTryCount = 1;
 bool hasVent = false, feelCorona = false;
 fstream WFile;
 vector<vector<int>> map = generateMap();
@@ -270,7 +270,7 @@ void InspectCurrentRoom() { //Inspecteerd in welke kamer je zit en of die ergens
 
 void PlayAgain(){ //Als je dood gaat krijg je de optie om opnieuw te spelen
     sprays = 5; //je sprays reseten naar 5
-    counter = 0; //counter voor de turns weer opnieuw zetten op 0
+    counterAI = 0; //counter voor de turns weer opnieuw zetten op 0
     char antwoord;
     cout << "Would you like to play again with the same map? Enter Y/N. if you want to quit, press Q" << endl;
     cin >> antwoord; 
@@ -301,6 +301,7 @@ void PlayAgain(){ //Als je dood gaat krijg je de optie om opnieuw te spelen
 void PerformAction(int cmd) { //om de te schieten, moven of quitten
     string line;
     ifstream WFile("map.txt");
+    tryCounter = 1;
     switch (cmd)
     {
  
@@ -336,10 +337,19 @@ void PerformAction(int cmd) { //om de te schieten, moven of quitten
                             cout << "Splashhhhh!" << endl;
                             cout << "The Coronavirus has been exterminated" << endl;
                             cout << "Congratulations!! You win!!" << endl;
-                            cout << "It took you: " << counter << " turns to win." << endl;
+                            cout << "It took you: " << counterSpeler << " turns and" << endl;
+                            cout << tryCounter << " tries to win." << endl;
+                            cout << "The averge turn for this configuration = " << counterAI / tryCounter << endl;
+                            
+                            cout << "Enter anything to return to main menu." << endl; 
+                            cin >> newRoom;
+                            cin.clear();
+                            cin.ignore(10000, '\n');
+                            cout << endl;
+                            
                             cout << endl;
                             coronaAlive = false; //Corona is exterminated 
-                            StartGame(); //weer terug naar de main menu
+                            playerAlive = false;
                         } 
                         else{
                             cout << "Oh no!!, you missed the Corona!!" << endl;
@@ -349,9 +359,9 @@ void PerformAction(int cmd) { //om de te schieten, moven of quitten
                                 cout << "The Corona flew to your room" << endl;
                                 cout << "YOU HAVE BEEN INFECTED, now you're dead. You suck, loser" << endl;
                                 PlayAgain(); //Als de corona naar jou kamer is gevlogen, ben je dood en krijg je weer de optie om opnieuw te spelen
-                                } 
                             } InspectCurrentRoom();
-                        }
+                        } 
+                    }
                 } catch (...){ //als er geen gelde kamer is gegeven
                     cout << "Not valid to shoot there" << endl;
                 }
@@ -400,9 +410,11 @@ int Move(int newRoom){ //Move functie voor de speler een nieuwe room kiest om in
 
 void PlayGame(){ //Alles wordt geplaatst en geeft de opties
     computerAlive = false;    //als je voor playgame kiest is player alive en gaat computeralive naar false
-	playerAlive = true;
+    playerAlive = true;
     int choice;
     bool validChoice = false;
+    counterSpeler = 0;
+    tryCounter = 1;
     vector<vector<int>> map = generateMap(); //alles wordt gegenereerd
     PlacePlayer();
     PlaceCorona();
@@ -412,7 +424,7 @@ void PlayGame(){ //Alles wordt geplaatst en geeft de opties
     write(map); //schijf map naar map.txt
 
     InspectCurrentRoom();
- 
+    counterSpeler++;
     while (playerAlive)
     {
         cout << "Enter an action choice." << endl;  //laat opties zien
@@ -469,6 +481,7 @@ void PlayAgainComputer(){ //Play again voor de computerspeler
     ventRoom = ventStart;
     sprays = 5;
     turnsFelt = 0;
+    wTryCount = 0;
     InspectCurrentRoom(); //checkt waar de computer is
 }
 
@@ -485,12 +498,13 @@ void moveComputer(){ //move computer
     InspectCurrentRoom();
 }
 
-void PlayGameComputer(){ //de AI gaat spelen
+void PlayGameComputer(){ //de Ai gaat spelen
     playerAlive = false; //zet de playerAlive op false voor de playagain functies
-	computerAlive = true;
+    computerAlive = true;
     sprays = 5;
-    tryCounter = 1; //tellen hoe vaak de AI de game heeft gespeeld met dezelfde configuratie
-    counter = 0;
+    tryCounter = 1; //tellen hoe vaak de Ai de game heeft gespeeld met dezelfde configuratie
+    counterAI = 0;
+    wTryCount = 1;
     vector<vector<int>> map = generateMap();
 
     PlacePlayer();
@@ -517,7 +531,8 @@ void PlayGameComputer(){ //de AI gaat spelen
         else{
 		turnsFelt = 0;
         }
-        counter++;
+        counterAI++;
+        wTryCount++;
         cout << "Sprays " << sprays << endl;
         // Als de corona vaker dan 1 keer geroken is en er nog sprays over zijn, spray in 1 van de buurkamers.
         if (turnsFelt > 1 && sprays > 0){
@@ -533,10 +548,15 @@ void PlayGameComputer(){ //de AI gaat spelen
                 cout << "Splashhhhh!" << endl;
                 cout << "The Coronavirus has been exterminated!" << endl;
                 cout << "Congratulations!! You win!!" << endl;
-                cout << "It took the computer: " << counter << " turns " << endl;
+                cout << "It took the computer: " << counterAI << " turns " << endl;
                 cout << "and " << tryCounter << " tries to win." << endl;
+                cout << "The winning try took: " << wTryCount << " turns to win." << endl;
+                cout << "The averge turn for this configuration = " << counterAI / tryCounter << endl;
+                
                 cout << endl;
-				computerAlive = false;
+                coronaAlive = false; // Corona is dood
+                computerAlive = false;
+                
             }
             // Als het niet de goede kamer was beweegt de wumpus.
             else{
