@@ -400,6 +400,7 @@ int Move(int newRoom){ //Move functie voor de speler een nieuwe room kiest om in
 
 void PlayGame(){ //Alles wordt geplaatst en geeft de opties
     computerAlive = false;    //als je voor playgame kiest is player alive en gaat computeralive naar false
+	playerAlive = true;
     int choice;
     bool validChoice = false;
     vector<vector<int>> map = generateMap(); //alles wordt gegenereerd
@@ -484,10 +485,11 @@ void moveComputer(){ //move computer
     InspectCurrentRoom();
 }
 
-void PlayGameComputer(){ //de Ai gaat spelen
+void PlayGameComputer(){ //de AI gaat spelen
     playerAlive = false; //zet de playerAlive op false voor de playagain functies
+	computerAlive = true;
     sprays = 5;
-    tryCounter = 1; //tellen hoe vaak de Ai de game heeft gespeeld met dezelfde configuratie
+    tryCounter = 1; //tellen hoe vaak de AI de game heeft gespeeld met dezelfde configuratie
     counter = 0;
     vector<vector<int>> map = generateMap();
 
@@ -533,10 +535,8 @@ void PlayGameComputer(){ //de Ai gaat spelen
                 cout << "Congratulations!! You win!!" << endl;
                 cout << "It took the computer: " << counter << " turns " << endl;
                 cout << "and " << tryCounter << " tries to win." << endl;
-                
                 cout << endl;
-                coronaAlive = false; // Corona is dood
-                StartGame();
+				computerAlive = false;
             }
             // Als het niet de goede kamer was beweegt de wumpus.
             else{
