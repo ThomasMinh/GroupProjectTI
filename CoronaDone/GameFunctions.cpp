@@ -551,7 +551,7 @@ void PlayGameComputer(){ //de Ai gaat spelen
                 cout << "It took the computer: " << counterAI << " turns " << endl;
                 cout << "and " << tryCounter << " tries to win." << endl;
                 cout << "The winning try took: " << wTryCount << " turns to win." << endl;
-                cout << "The averge turn for this configuration = " << counterAI / tryCounter << endl;
+                cout << "The average turn for this configuration = " << counterAI / tryCounter << endl;
                 
                 cout << endl;
                 coronaAlive = false; // Corona is dood
