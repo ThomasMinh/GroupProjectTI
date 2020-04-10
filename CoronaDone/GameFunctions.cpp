@@ -339,7 +339,7 @@ void PerformAction(int cmd) { //om de te schieten, moven of quitten
                             cout << "Congratulations!! You win!!" << endl;
                             cout << "It took you: " << counterSpeler << " turns and" << endl;
                             cout << tryCounter << " tries to win." << endl;
-                            cout << "The averge turn for this configuration = " << counterAI / tryCounter << endl;
+                            cout << "The average turn for this configuration = " << counterSpeler / tryCounter << endl;
                             
                             cout << "Enter anything to return to main menu." << endl; 
                             cin >> newRoom;
